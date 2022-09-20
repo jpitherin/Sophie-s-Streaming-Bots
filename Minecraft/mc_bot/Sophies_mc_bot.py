@@ -1,9 +1,12 @@
 from mctools import RCONClient  # Import the RCONClient
 import sys
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-HOST = 'localhost'  # Hostname of the Minecraft server
-PORT = 25565  # Port number of the RCON server
-ME = "Sophie__Games"
+HOST = os.environ['HOST']  # Hostname of the Minecraft server
+PORT = os.environ['PORT']  # Port number of the RCON server
+ME = os.environ['ME']
 
 # Create the RCONClient:
 
@@ -76,9 +79,9 @@ def AccioKitty(chatter,name):
     # /summon cat ~ ~ ~ {CustomName:"\"Daisy\"",Owner:Sophie__Games}
     
     if name != ".":
-        cmd = cmd + '{CustomName:"\\"' + name + '\\"",Owner:Sophie__Games}'
+        cmd = cmd + '{CustomName:"\\"' + name + '\\"",Owner:'+ME+'}'
     else:
-        cmd = cmd + "{Owner:Sophie__Games}"
+        cmd = cmd + "{Owner:"+ME+"}"
         
     print(cmd)
     
@@ -88,6 +91,42 @@ def AccioKitty(chatter,name):
         response = rcon.command(f"say Meet {name}")
     rcon.stop()
     
+def Bzzz(chatter):
+    rcon.start()    
+    response = rcon.command("summon bee ~ ~ ~")
+    response = rcon.command("summon bee ~ ~ ~")
+    response = rcon.command("summon bee ~ ~ ~")
+    response = rcon.command(f"say Bees?!?!?! (Thanks, {chatter}...)")
+    rcon.stop()
+    
+def DayTime(chatter):
+    rcon.start()    
+    response = rcon.command("time set day")
+    response = rcon.command(f"Good morning, {chatter}!")
+    rcon.stop()
+    
+def NightTime(chatter):
+    rcon.start()    
+    response = rcon.command("time set night")
+    response = rcon.command(f"Good night, {chatter}!")
+    rcon.stop()
+ 
+def HomeJeeves(chatter):
+    rcon.start()    
+    cmd = f"teleport {ME} 0 64 0"
+    response = rcon.command(cmd)
+    response = rcon.command(f"{chatter} is sending Sophie home")
+    rcon.stop()
+
+def GetLost(chatter):
+    rcon.start()   
+    cmd = f"spreadplayers ~ ~ 10 50000 false {ME}"
+    response = rcon.command(cmd)
+    response = rcon.command(f"{chatter} is sending Sophie on an adventure")
+    rcon.stop()
+
+
+ 
 if __name__ == "__main__":
     chatter = sys.argv[1]
     command = sys.argv[2]
@@ -96,6 +135,12 @@ if __name__ == "__main__":
     success = login()
     
     if success == True:
+    
+        #rcon.start()
+        #cmd = f"op {ME}"
+        #response = rcon.command(cmd)
+        #rcon.stop()
+        
         print("command", command)
         
         if command == "MakeItRain":
@@ -119,3 +164,15 @@ if __name__ == "__main__":
         
         if command == "AccioKitty":
             AccioKitty(chatter,name)
+        if command == "Bzzz":
+            Bzzz(chatter)
+            
+        if command == "DayTime":
+            DayTime(chatter)
+        if command == "NightTime":
+            NightTime(chatter)  
+            
+        if command == "HomeJeeves":
+            HomeJeeves(chatter) 
+        if command == "GetLost":
+            GetLost(chatter)
