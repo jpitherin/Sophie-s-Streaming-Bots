@@ -1,1 +1,1 @@
-# StreamingBots
+# Sophie's Streaming Bots
